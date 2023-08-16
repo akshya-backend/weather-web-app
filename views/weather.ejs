@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Weather</title>
+    <link rel="stylesheet" href="/css/css2.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+   <style>
+      
+    </style>
+</head>
+
+<body>
+	<% if (locals.error) { %>
+		<div class="m-4">
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: relative;">
+				<h4 class="alert-heading" style="display: flex;
+				align-items: baseline;
+				flex-direction: row;
+				align-content: stretch;
+				justify-content: center;"><i class="bi bi-exclamation-octagon-fill" style="margin-right: 0.5rem;"></i> Sorry! Unable To Track Your City .</h4>
+				
+		</div>
+		
+    <% } %>
+
+        <div class="container">
+            <div class="weather-side">
+                <div class="weather-gradient"></div>
+                <div class="date-container">
+                    <h2 class="date-dayname"><%= time_res.day %></h2>
+                    <span class="date-day"><%= time_res.date %> <%= time_res.month %>, <%= time_res.year %></span>
+                    <div style="display: flex; align-items: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-map-pin location-icon">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span class="location"><%= data2.location.name %>, <%= data2.location.country %></span>
+                    </div>
+                </div>
+                <div class="weather-container">
+                    <img class="cloud-image" src="<%= data %>" style="width: 60px;">
+                    <h1 class="weather-temp"><%= data2.current.temp_c %>°C</h1>
+                    <h3 class="weather-desc"><%= toObject.weather[0].main %></h3>
+                </div>
+            </div>
+            <div class="info-side">
+                <div class="today-info-container">
+                    <div class="today-info">
+                        <div class="precipitation">
+                            <span class="title">PRECIPITATION</span>
+                            <span class="value"><%= data2.forecast.forecastday[0].day.totalprecip_mm %> mm</span>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="humidity">
+                            <span class="title">HUMIDITY</span>
+                            <span class="value"><%= data2.forecast.forecastday[0].day.avghumidity %> %</span>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="wind">
+                            <span class="title">WIND</span>
+                            <span class="value"><%= data2.forecast.forecastday[0].day.maxwind_mph %> km/hr</span>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="week-container">
+                    <ul class="week-list">
+                        <% data2.forecast.forecastday.forEach((element, index) => { 
+                            if (index === 0) { return; }
+                            const epochTimestamp = element.date_epoch;
+                            const date = new Date(epochTimestamp * 1000);
+                            const dayWeek = date.toLocaleDateString('en-US', { weekday: 'short' }) %>
+                            <li>
+                                <img class="weather-icon" src="<%= element.day.condition.icon %>" alt="Weather Icon">
+                                <span class="day-name"><%= dayWeek %></span>
+                                <span class="day-temp"><%= element.day.avgtemp_c %>°C</span>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </div>
+				<div class="location-container">
+        <form action="/report" method="post">
+            <div class="search-container">
+                <input type="text" style="text-align: center;" name="city" placeholder="Enter Your City" class="search-input" required>
+            </div>
+            <button id="search-button" style="width: 100%;" class="location-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+                    <circle cx="12" cy="12" r="8" fill="none" stroke-width="2"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+        </form>
+    </div>
+
+            </div>
+        </div>
+    
+</body>
+</html>
