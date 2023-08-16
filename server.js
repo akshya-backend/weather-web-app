@@ -17,7 +17,7 @@ app.get("/", async(req, res) => {
  try {
     const fetchdata = await axios.get(url)
     const  fetchdata2 = await axios.get(url2) 
-    console.log(fetchdata);
+    
     const data2 = fetchdata2.data
     const toObject = fetchdata.data;
     let icon = toObject.weather[0].icon;
