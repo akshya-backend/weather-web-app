@@ -64,7 +64,7 @@ app.post("/report", async (req, res) => {
       res.redirect(`/?error=${isError}`)
      }
     })
-const PORT = 2000;
-app.listen(PORT, () => {
+
+app.listen( process.env.PORT || 3000, () => {
   console.log(`Server is running on port ${PORT}`);
 })
